@@ -17,7 +17,7 @@ namespace StudentRating.Classes.Repositories
         private static int _idHolder;
 
         public ICollection<Grade> Grades { get; }
-        public ICollection<Course> Courses { get; }
+        public IReadOnlyList<Course> Courses { get; }
         public event Action GradesChanged;
 
         public FileRepository()
@@ -29,8 +29,8 @@ namespace StudentRating.Classes.Repositories
                 using (FileStream fsCourses = new FileStream("../../../StudentCourses.bin", FileMode.Open))
                 {
                     BinaryFormatter bf = new BinaryFormatter();
-                    Courses = (List<Course>) bf.Deserialize(fsCourses);
-                    Grades = (List<Grade>) bf.Deserialize(fsGrades);
+                    Courses = (IReadOnlyList<Course>) bf.Deserialize(fsCourses);
+                    Grades = (ICollection<Grade>) bf.Deserialize(fsGrades);
                 }
             }
 

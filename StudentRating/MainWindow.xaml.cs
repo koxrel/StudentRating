@@ -32,7 +32,7 @@ namespace StudentRating
             InitializeComponent();
 
             _calculator = new AggregatedRatingCalculator();
-            _repo = new FileRepository();
+            _repo = new TestRepository();
 
             dataGridGrades.ItemsSource = _repo.Grades;
             _repo.GradesChanged += dataGridGrades.Items.Refresh;

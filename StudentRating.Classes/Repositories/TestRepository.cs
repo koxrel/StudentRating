@@ -28,9 +28,9 @@ namespace StudentRating.Classes.Repositories
 
             Grades = new List<Grade>
             {
-                new Grade(new Course("Programming", 4.15), 7),
-                new Grade(new Course("Geometry and algebra", 2), 5),
-                new Grade(new Course("Theoretical bases of informatics", 3.9), 10)
+                new Grade(Courses[0], 7),
+                new Grade(Courses[1], 5),
+                new Grade(Courses[2], 10)
             };
 
             foreach (var grade in Grades)
@@ -38,7 +38,7 @@ namespace StudentRating.Classes.Repositories
         }
 
         public ICollection<Grade> Grades { get; }
-        public ICollection<Course> Courses { get; }
+        public IReadOnlyList<Course> Courses { get; }
         public event Action GradesChanged;
 
         public void AddGrade(Grade grade)
