@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StudentRating.Classes;
 using StudentRating.Classes.Domain;
 using StudentRating.Classes.Interfaces;
 using StudentRating.Classes.RatingCalculators;
@@ -24,23 +25,23 @@ namespace StudentRating
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IRepository _repo;
-        private IRatingCalculator _calculator;
-        
+        //private IRepository _repo;
+        //private IRatingCalculator _calculator;
+
+        private Factory _factory;
+
         public MainWindow()
         {
             InitializeComponent();
+            _factory = Factory.GetFactory;
 
-            _calculator = new AggregatedRatingCalculator();
-            _repo = new TestRepository();
-
-            dataGridGrades.ItemsSource = _repo.Grades;
-            _repo.GradesChanged += dataGridGrades.Items.Refresh;
+            dataGridGrades.ItemsSource = _factory.GetRepository().Grades;
+            _factory.GetRepository().GradesChanged += dataGridGrades.Items.Refresh;
         }
 
         private void buttonRating_Click(object sender, RoutedEventArgs e)
         {
-            textBlockRating.Text = String.Format("Your rating is = {0}", _calculator.CalculateRating(_repo.Grades));
+            textBlockRating.Text = String.Format("Your rating is = {0}", _factory.GetCalculator().CalculateRating(_factory.GetRepository().Grades));
         }
 
         private void GradeModification(object sender, RoutedEventArgs e)
@@ -49,7 +50,7 @@ namespace StudentRating
             {
                 comboBoxCourses =
                 {
-                    ItemsSource = _repo.Courses,
+                    ItemsSource = _factory.GetRepository().Courses,
                     SelectedIndex = 0
                 }
             };
@@ -62,7 +63,7 @@ namespace StudentRating
 
             try
             {
-                _repo.AddGrade(newGrade);
+                _factory.GetRepository().AddGrade(newGrade);
             }
             catch (ArgumentNullException)
             {
@@ -71,7 +72,7 @@ namespace StudentRating
             }
             catch (ArgumentException)
             {
-                _repo.EditGrade(newGrade);
+                _factory.GetRepository().EditGrade(newGrade);
             }
         }
 
@@ -81,7 +82,7 @@ namespace StudentRating
             if (removeGrade == null)
                 return;
             
-            _repo.RemoveGrade(gr => gr.Id == removeGrade.Id);
+            _factory.GetRepository().RemoveGrade(gr => gr.Id == removeGrade.Id);
         }
     }
 }
