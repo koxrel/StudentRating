@@ -1,0 +1,55 @@
+﻿<Window x:Class="StudentRating.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rating calculator" Height="350" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock TextAlignment="Center">Your marks</TextBlock>
+        <DataGrid Grid.Row="1" Name="dataGridGrades" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Course" Width="6*" Binding="{Binding Course.Name}"/>
+                <DataGridTextColumn Header="Credits" Width="1*" Binding="{Binding Course.Credits}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment"  Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Mark"  Width="1*" Binding="{Binding Mark}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment"  Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <Button Name="buttonAdd" Margin="5 3" Click="GradeModification">Add</Button>
+            <Button Name="buttonEdit" Margin="5 3" Click="GradeModification">Edit</Button>
+            <Button Name="buttonRemove" Margin="5 3" Click="GradeRemoval">Remove</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5 5" Grid.Row="2">
+            <Button Name="buttonRating" Width="100" Height="20" Margin="5 0" Click="buttonRating_Click">Rating</Button>
+            <TextBlock Name="textBlockRating" VerticalAlignment="Center"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
