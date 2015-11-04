@@ -10,8 +10,8 @@ namespace StudentRating.Classes.Interfaces
 {
     public interface IRepository
     {
-        List<Grade> Grades { get; }
-        List<Course> Courses { get; }
+        ICollection<Grade> Grades { get; }
+        ICollection<Course> Courses { get; }
 
         event Action GradesChanged;
 

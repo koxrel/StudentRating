@@ -9,6 +9,6 @@ namespace StudentRating.Classes.Interfaces
 {
     public interface IRatingCalculator
     {
-        double CalculateRating(List<Grade> grades);
+        double CalculateRating(IEnumerable<Grade> grades);
     }
 }
