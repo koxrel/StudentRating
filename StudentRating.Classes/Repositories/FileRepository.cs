@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace StudentRating.Classes.Repositories
     {
         private static int _idHolder;
 
-        public List<Grade> Grades { get; }
-        public List<Course> Courses { get; }
+        public ICollection<Grade> Grades { get; }
+        public IReadOnlyList<Course> Courses { get; }
         public event Action GradesChanged;
 
         public FileRepository()
@@ -28,8 +29,8 @@ namespace StudentRating.Classes.Repositories
                 using (FileStream fsCourses = new FileStream("../../../StudentCourses.bin", FileMode.Open))
                 {
                     BinaryFormatter bf = new BinaryFormatter();
-                    Courses = (List<Course>) bf.Deserialize(fsCourses);
-                    Grades = (List<Grade>) bf.Deserialize(fsGrades);
+                    Courses = (IReadOnlyList<Course>) bf.Deserialize(fsCourses);
+                    Grades = (ICollection<Grade>) bf.Deserialize(fsGrades);
                 }
             }
 
@@ -60,9 +61,9 @@ namespace StudentRating.Classes.Repositories
             if (grade == null)
                 throw new ArgumentNullException();
 
-            int index = Grades.IndexOf(grade);
-            if (index != -1)
-                Grades[index] = grade;
+            //In order for ICollection<T> to work
+            foreach (var gradeInList in Grades.Where(gradeInList => gradeInList.Equals(grade)))
+                gradeInList.Mark = grade.Mark;
 
             Save();
             if (GradesChanged != null)
@@ -71,7 +72,9 @@ namespace StudentRating.Classes.Repositories
 
         public void RemoveGrade(Predicate<Grade> p)
         {
-            Grades.RemoveAll(p);
+            var gradeSatisfy = Grades.Where(p.Invoke).ToArray();
+            foreach (var grade in gradeSatisfy)
+                Grades.Remove(grade);
 
             Save();
             if (GradesChanged != null)

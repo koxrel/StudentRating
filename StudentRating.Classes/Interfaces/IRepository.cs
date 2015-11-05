@@ -10,8 +10,10 @@ namespace StudentRating.Classes.Interfaces
 {
     public interface IRepository
     {
-        List<Grade> Grades { get; }
-        List<Course> Courses { get; }
+        //ICollection<T> is the lowest interface in the hierarchy that supports add/removal logic
+        ICollection<Grade> Grades { get; }
+        //IReadOnlyList<T> is the lowest interface in the hierarchy that supports indexing
+        IReadOnlyList<Course> Courses { get; }
 
         event Action GradesChanged;
 

@@ -10,7 +10,7 @@ namespace StudentRating.Classes.RatingCalculators
 {
     public class AggregatedRatingCalculator : IRatingCalculator
     {
-        public double CalculateRating(List<Grade> grades)
+        public double CalculateRating(IEnumerable<Grade> grades)
         {
             return grades.Sum(grade => grade.Mark*grade.Course.Credits);
         }

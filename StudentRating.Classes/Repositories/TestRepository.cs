@@ -37,8 +37,8 @@ namespace StudentRating.Classes.Repositories
                 grade.Id = _idHolder++;
         }
 
-        public List<Grade> Grades { get; }
-        public List<Course> Courses { get; }
+        public ICollection<Grade> Grades { get; }
+        public IReadOnlyList<Course> Courses { get; }
         public event Action GradesChanged;
 
         public void AddGrade(Grade grade)
@@ -61,9 +61,8 @@ namespace StudentRating.Classes.Repositories
             if (grade == null)
                 throw new ArgumentNullException();
 
-            int index = Grades.IndexOf(grade);
-            if (index != -1)
-                Grades[index] = grade;
+            foreach (var gradeInList in Grades.Where(gradeInList => gradeInList.Equals(grade)))
+                gradeInList.Mark = grade.Mark;
 
             Save();
             if (GradesChanged != null)
@@ -72,7 +71,9 @@ namespace StudentRating.Classes.Repositories
 
         public void RemoveGrade(Predicate<Grade> p)
         {
-            Grades.RemoveAll(p);
+            var gradeSatisfy = Grades.Where(p.Invoke).ToArray();
+            foreach (var grade in gradeSatisfy)
+                Grades.Remove(grade);
 
             Save();
             if (GradesChanged != null)
